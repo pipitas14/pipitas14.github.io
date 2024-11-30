@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Platón y Aristóteles</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+        .question-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .question {
+            font-size: 1.2em;
+        }
+        .options {
+            margin-top: 15px;
+        }
+        .options button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .options button.correct {
+            background-color: #28a745;
+            color: white;
+        }
+        .options button.incorrect {
+            background-color: #dc3545;
+            color: white;
+        }
+        .options button:hover:not(.correct):not(.incorrect) {
+            background-color: #007BFF;
+            color: white;
+        }
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="question-container">
+        <div class="question" id="question">Cargando pregunta...</div>
+        <div class="options" id="options"></div>
+    </div>
+    <div class="result" id="result"></div>
+    <script>
+        // Preguntas y respuestas
+        const questions = [
+            { question: "Aristotle founded the philosophical school called ___", options: ["Lyceum", "Academy", "the Garden of Athens", "none of the above"], correct: 0 },
+            { question: "The most important ethical work of Aristotle is called ___", options: ["Menón or virtue", "Ethics to Eudemus", "Nichomachean Ethics", "none of the above"], correct: 2 },
+            { question: "Aristotle was the teacher of ___", options: ["Alejandro Magno", "Dionysius II of Syracuse", "Philip of Macedonia", "none of the above"], correct: 0 },
+            { question: "What is Plato's 'Theory of Ideas'?", options: ["The idea that only material things exist", "The notion that Ideas are true reality", "Belief in multiple gods", "The theory of evolution"], correct: 1 },
+            { question: "According to Plato, who should govern?", options: ["The rich", "The philosophers", "The warriors", "Merchants"], correct: 1 },
+            { question: "What method do Socrates and Plato use in their dialogues?", options: ["Deductive method", "Inductive method", "Dialectical method", "Scientific method"], correct: 2 },
+            { question: "According to Aristotle, movement is ___", options: ["the passage from act to power", "the passage from power to act", "the power of those beings that are in act", "none of the above"], correct: 1 },
+            { question: "Aristotle's hylemorphic theory maintains that all sensible things possess the structure ___", options: ["act/power", "form/matter", "substance/accidents", "none of the above"], correct: 1 },
+            { question: "According to Plato, what role does education play?", options: ["It is optional", "It is essential to achieve the truth", "It is only for the privileged", "It is not important"], correct: 1 },
+            { question: "For Plato, the virtue that corresponds to the rational part of the soul is ___", options: ["temperance", "the fortress", "prudence", "none of the above"], correct: 2 },
+            { question: "According to Aristotle, in living beings the soul is ___ of the body.", options: ["the form", "the power", "an attribute", "none of the above"], correct: 0 },
+            { question: "For Plato, man is ___", options: ["essentially soul", "essentially body", "soul and body", "none of the above"], correct: 0 },
+            { question: "The most important influence on Platonic thought is that of ___", options: ["Parmenides", "Socrates", "Pythagoras", "none of the above"], correct: 1 },
+            { question: "For Aristotle, the theory according to which in the natural world things behave manifesting final behavior is called ___", options: ["teleology", "theology", "mechanism", "none of the above"], correct: 0 },
+            { question: "For Aristotle, virtue is ___", options: ["always an absolute magnitude of a passion or an action", "related to the 'middle term regarding the thing'", "related to the purposes inscribed in natural beings", "none of the above"], correct: 1 },
+            // Continúa añadiendo el resto de preguntas aquí...
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function showQuestion() {
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const currentQuestion = questions[currentQuestionIndex];
+
+            questionElement.textContent = currentQuestion.question;
+            optionsElement.innerHTML = '';
+
+            currentQuestion.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.textContent = option;
+                button.onclick = () => handleAnswer(index, button);
+                optionsElement.appendChild(button);
+            });
+        }
+
+        function handleAnswer(selectedIndex, button) {
+            const currentQuestion = questions[currentQuestionIndex];
+
+            if (selectedIndex === currentQuestion.correct) {
+                button.classList.add('correct');
+                score++;
+            } else {
+                button.classList.add('incorrect');
+                // Resaltar la opción correcta
+                const optionsElement = document.getElementById('options');
+                optionsElement.children[currentQuestion.correct].classList.add('correct');
+            }
+
+            // Deshabilitar todos los botones después de una respuesta
+            Array.from(document.getElementById('options').children).forEach(btn => btn.disabled = true);
+
+            // Mostrar siguiente pregunta después de un tiempo
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    showQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1000);
+        }
+
+        function showResult() {
+            document.querySelector('.question-container').style.display = 'none';
+            document.getElementById('result').textContent = `El total de preguntas acertadas es: ${score} de ${questions.length}`;
+        }
+
+        // Mostrar la primera pregunta
+        showQuestion();
+    </script>
+</body>
+</html>
+
